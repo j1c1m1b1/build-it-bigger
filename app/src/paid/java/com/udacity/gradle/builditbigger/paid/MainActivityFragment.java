@@ -1,4 +1,4 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.paid;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.jcmb.jokedisplay.JokeActivity;
+import com.udacity.gradle.builditbigger.MainActivity;
+import com.udacity.gradle.builditbigger.R;
 import com.udacity.gradle.builditbigger.tasks.ApiLoader;
 
 
@@ -35,6 +35,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
         pbLoading = (ProgressBar) root.findViewById(R.id.pbLoading);
+        pbLoading.setVisibility(View.GONE);
 
         Button btnJoke = (Button)root.findViewById(R.id.btnJoke);
 
@@ -45,14 +46,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             }
         });
 
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
         return root;
     }
 
@@ -89,7 +82,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
         Log.d(MainActivity.class.getSimpleName(), "Loader created");
-        return new ApiLoader(getActivity());
+        return new ApiLoader(getActivity(), ApiLoader.ROOT_URL);
     }
 
     @Override

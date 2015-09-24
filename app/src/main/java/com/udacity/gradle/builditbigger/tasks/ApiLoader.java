@@ -17,10 +17,20 @@ import java.io.IOException;
  */
 public class ApiLoader extends AsyncTaskLoader<String> {
 
+    public static final String ROOT_URL = "https://build-it-bigger-1078.appspot.com/_ah/api/";
+    private static final String TEST_URL = "http://localhost:8080/_ah/api";
     private static MyApi myApiService = null;
+    private String url;
 
     public ApiLoader(Context context) {
         super(context);
+        forceLoad();
+    }
+
+    public ApiLoader(Context context, String url)
+    {
+        super(context);
+        this.url = url;
         forceLoad();
     }
 
@@ -29,9 +39,14 @@ public class ApiLoader extends AsyncTaskLoader<String> {
         Log.d(ApiLoader.class.getSimpleName(), "Loading in background");
         if(myApiService == null)
         {
+            if(url == null)
+            {
+                url = TEST_URL;
+            }
+
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                    .setRootUrl(url)
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
                         public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
