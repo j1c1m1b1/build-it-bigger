@@ -18,18 +18,21 @@ allprojects {
     }
 }
 
+
 task wrap {
     dependsOn 'stopServer'
 
+    println 'Wrapping it up'
+
     doLast{
-        println 'All done'
+        println 'Your wrap is served matey'
     }
 }
 
 task startServer {
     dependsOn ':backend:appengineRun'
 
-    finalizedBy 'doTests'
+    println 'Starting server'
 
     doLast {
         println 'Server started'
@@ -37,10 +40,12 @@ task startServer {
 }
 
 task doTests {
-    dependsOn = ['startServer', ':app:connectedAndroidTest']
+    evaluationDependsOn ':backend'
+    dependsOn 'startServer'
+    dependsOn ':app:connectedAndroidTest'
 
     doLast {
-        println 'Tests Done'
+        println 'Tests Done, Nice!'
     }
 }
 
@@ -49,5 +54,13 @@ task stopServer {
 
     doLast {
         println 'Server stopped'
+    }
+}
+
+
+project(':backend') {
+
+    appengine {
+        daemon true
     }
 }
